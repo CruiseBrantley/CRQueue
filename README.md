@@ -1,0 +1,2 @@
+# CRQueue
+Crunchyroll Queue Exporter
