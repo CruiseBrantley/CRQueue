@@ -19,6 +19,8 @@ chrome.storage.sync.get("objectStore", data => {
       ? (series.style.color = "red")
       : (series.style.color = "black");
     series.innerHTML = item.title;
+    series.style.marginBottom = "5px";
+    series.style.display = "inline-block";
     page.appendChild(series);
     // page.appendChild(newCheckBox);
     page.appendChild(linebreak);
