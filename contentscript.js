@@ -1,3 +1,4 @@
+//objectStore start
 let list = document.querySelectorAll(".series-title:not(.block)");
 let newerList = [];
 for (let item of list) newerList.push(item.innerText);
@@ -15,6 +16,12 @@ for (let i = 0; i < progressList.length; i++) {
 
 newerList.forEach((item, index) => (objectStore[index].title = item));
 
-chrome.storage.sync.set({ objectStore }, function() {
+let currentEpisodeArray = document.querySelectorAll(".landscape-element.left");
+currentEpisodeArray.forEach(
+  (item, index) => (objectStore[index].episodeURL = item.href)
+);
+//objectStore complete
+
+chrome.storage.local.set({ objectStore }, function() {
   console.log("Set objectStore.");
 });
