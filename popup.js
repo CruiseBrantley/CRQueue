@@ -15,17 +15,15 @@ chrome.storage.local.get("objectStore", data => {
       },
       tab => {
         targetId = tab.id;
-        // setTimeout(() => {
-        //   chrome.tabs.remove(tab.id);
-        // }, 10000);
       }
     );
     const dataCheck = setInterval(() => {
       chrome.storage.local.get("objectStore", data => {
         if (data.objectStore) {
           loading = false;
-          clearInterval(dataCheck);
+          chrome.tabs.remove(targetId);
           createQueue(data);
+          clearInterval(dataCheck);
         }
       });
     }, 100);
