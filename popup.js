@@ -4,31 +4,33 @@ let targetId = null;
 let page = document.getElementById("seriesDiv");
 
 chrome.storage.local.get("objectStore", data => {
-  if (data.objectStore) {
-    createQueue(data);
-  } else {
-    chrome.tabs.create(
-      {
-        url: "https://www.crunchyroll.com/home/queue",
-        index: 0,
-        active: false
-      },
-      tab => {
-        targetId = tab.id;
-      }
-    );
-    const dataCheck = setInterval(() => {
-      chrome.storage.local.get("objectStore", data => {
-        if (data.objectStore) {
-          loading = false;
-          chrome.tabs.remove(targetId);
-          createQueue(data);
-          clearInterval(dataCheck);
-        }
-      });
-    }, 100);
-  }
+  data.objectStore ? createQueue(data) : loadData();
 });
+
+function loadData(clearData) {
+  clearData ? chrome.storage.local.set({ objectStore: null }) : null;
+  chrome.tabs.create(
+    {
+      url: "https://www.crunchyroll.com/home/queue",
+      index: 0,
+      active: false
+    },
+    tab => {
+      targetId = tab.id;
+    }
+  );
+  const dataCheck = setInterval(() => {
+    chrome.storage.local.get("objectStore", data => {
+      if (data.objectStore) {
+        loading = false;
+        chrome.tabs.remove(targetId);
+        createQueue(data);
+        clearInterval(dataCheck);
+      }
+    });
+  }, 100);
+}
+
 function createQueue(data) {
   loading = false;
   objectStore = data.objectStore;
