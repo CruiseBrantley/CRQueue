@@ -1,4 +1,5 @@
 let objectStore = [];
+let targetId = null;
 let page = document.getElementById("seriesDiv");
 
 chrome.storage.local.get("objectStore", data => {
@@ -20,7 +21,7 @@ chrome.storage.local.get("objectStore", data => {
         chrome.tabs.update({
           url: item.episodeURL
         });
-      });
+      }); //URL click handler
 
       let expanded = false;
       container.addEventListener("click", () => {
@@ -68,6 +69,19 @@ chrome.storage.local.get("objectStore", data => {
       );
       count++;
     }
+  } else {
+    chrome.tabs.create(
+      {
+        url: "https://www.crunchyroll.com/home/queue",
+        index: 0,
+        active: false
+      },
+      tab => {
+        setTimeout(() => {
+          chrome.tabs.remove(tab.id);
+        }, 10000);
+      }
+    );
   }
 });
 function appendChildren(
