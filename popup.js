@@ -3,21 +3,22 @@ let loading = true;
 let targetId = null;
 let page = document.getElementById("seriesDiv");
 
-chrome.storage.local.get("objectStore", data => {
-  data.objectStore ? createQueue(data) : loadData();
-});
+chrome.storage.local.get("objectStore", data =>
+  data.objectStore ? createQueue(data) : loadData()
+);
 
 function loadData(clearData) {
   clearData ? chrome.storage.local.set({ objectStore: null }) : null;
+  let loadingElement = document.createElement("h3");
+  loadingElement.innerHTML = "Loading...";
+
   chrome.tabs.create(
     {
       url: "https://www.crunchyroll.com/home/queue",
       index: 0,
       active: false
     },
-    tab => {
-      targetId = tab.id;
-    }
+    tab => (targetId = tab.id)
   );
   const dataCheck = setInterval(() => {
     chrome.storage.local.get("objectStore", data => {
@@ -37,13 +38,14 @@ function createQueue(data) {
   console.log(objectStore);
   let count = 0;
   for (let item of objectStore) {
-    let linebreak = document.createElement("br");
-    let container = createContainer(count);
-    let episodeNumber = createEpisodeNumber(item);
-    let descriptionContainer = createDescriptionContainer();
-    let episodeTitle = createEpisodeTitle(item);
-    let episodeDescription = createEpisodeDescription(item);
-    let series = createSeries(item);
+    const linebreak = document.createElement("br");
+    const container = createContainer(count);
+    const episodeNumber = createEpisodeNumber(item);
+    const descriptionContainer = createDescriptionContainer();
+    const episodeTitle = createEpisodeTitle(item);
+    const episodeDescription = createEpisodeDescription(item);
+    const series = createSeries(item);
+    const check = createCheck(item);
     series.addEventListener("click", e => {
       e.stopPropagation();
       chrome.tabs.update({
@@ -79,7 +81,7 @@ function createQueue(data) {
         series.style.boxShadow = null;
         series.style.border = "1px solid transparent";
         series.style.marginLeft = null;
-        item.watched ? (series.style.textDecoration = "line-through") : null;
+        // item.watched ? (series.style.textDecoration = "line-through") : null;
         series.style.background = null;
       }
     });
@@ -90,7 +92,8 @@ function createQueue(data) {
       descriptionContainer,
       episodeNumber,
       episodeTitle,
-      episodeDescription
+      episodeDescription,
+      check
     );
     count++;
   }
@@ -103,10 +106,12 @@ function appendChildren(
   descriptionContainer,
   episodeNumber,
   episodeTitle,
-  episodeDescription
+  episodeDescription,
+  check
 ) {
   page.appendChild(container);
   container.appendChild(series);
+  container.appendChild(check);
   container.appendChild(linebreak);
   container.appendChild(descriptionContainer);
   descriptionContainer.appendChild(episodeNumber);
@@ -116,7 +121,7 @@ function appendChildren(
 
 function createSeries(item) {
   let series = document.createElement("span");
-  item.watched ? (series.style.textDecoration = "line-through") : null;
+  // item.watched ? (series.style.textDecoration = "line-through") : null;
   series.innerHTML = item.title;
   series.style.marginBottom = "5px";
   series.style.padding = "5px";
@@ -136,6 +141,17 @@ function createEpisodeTitle(item) {
   episodeTitle.style.padding = "5px";
   episodeTitle.style.fontSize = "1rem";
   return episodeTitle;
+}
+
+function createCheck(item) {
+  let check = document.createElement("span");
+  check.innerHTML = item.watched ? " &#10003;" : "";
+  check.style.marginBottom = "5px";
+  check.style.padding = "5px";
+  check.style.fontSize = "1.2rem";
+  check.style.position = "absolute";
+  check.style.right = "50px";
+  return check;
 }
 
 function createEpisodeDescription(item) {
