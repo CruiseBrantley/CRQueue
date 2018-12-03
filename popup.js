@@ -24,6 +24,7 @@ chrome.storage.local.get("objectStore", data => {
       series.style.cursor = "pointer";
       series.style.transitionDuration = ".25s";
       series.style.fontSize = "1rem";
+      series.style.border = "1px solid transparent";
 
       series.addEventListener("click", () => {
         chrome.tabs.update({
@@ -39,7 +40,7 @@ chrome.storage.local.get("objectStore", data => {
       });
       container.addEventListener("mouseleave", () => {
         series.style.boxShadow = null;
-        series.style.border = null;
+        series.style.border = "1px solid transparent";
         series.style.marginLeft = null;
         item.watched ? (series.style.textDecoration = "line-through") : null;
         series.style.background = null;
