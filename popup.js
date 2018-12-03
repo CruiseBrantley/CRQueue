@@ -9,13 +9,10 @@ chrome.storage.local.get("objectStore", data => {
     for (let item of objectStore) {
       let linebreak = document.createElement("br");
       let container = createContainer(count);
-
       let episodeNumber = createEpisodeNumber(item);
-
       let descriptionContainer = createDescriptionContainer();
-
+      let episodeTitle = createEpisodeTitle(item);
       let episodeDescription = createEpisodeDescription(item);
-
       let series = createSeries(item);
 
       series.addEventListener("click", e => {
@@ -29,7 +26,15 @@ chrome.storage.local.get("objectStore", data => {
       container.addEventListener("click", () => {
         expanded = !expanded;
         if (expanded) {
-          descriptionContainer.style.height = "70px";
+          descriptionContainer.style.height = "100px";
+          console.log(descriptionContainer, descriptionContainer.scrollHeight);
+          // while (
+          //   descriptionContainer.offsetHeight <
+          //   descriptionContainer.scrollHeight
+          // ) {
+          //   descriptionContainer.style.height =
+          //     descriptionContainer.offsetHeight + 20 + "px";
+          // }
         } else {
           descriptionContainer.style.height = "0px";
         }
@@ -58,6 +63,7 @@ chrome.storage.local.get("objectStore", data => {
         linebreak,
         descriptionContainer,
         episodeNumber,
+        episodeTitle,
         episodeDescription
       );
       count++;
@@ -70,6 +76,7 @@ function appendChildren(
   linebreak,
   descriptionContainer,
   episodeNumber,
+  episodeTitle,
   episodeDescription
 ) {
   page.appendChild(container);
@@ -77,6 +84,7 @@ function appendChildren(
   container.appendChild(linebreak);
   container.appendChild(descriptionContainer);
   descriptionContainer.appendChild(episodeNumber);
+  descriptionContainer.appendChild(episodeTitle);
   descriptionContainer.appendChild(episodeDescription);
 }
 
@@ -91,8 +99,17 @@ function createSeries(item) {
   series.style.cursor = "pointer";
   series.style.transitionDuration = ".25s";
   series.style.border = "1px solid transparent";
-  series.style.maxWidth = "300px";
+  series.style.maxWidth = "80%";
   return series;
+}
+
+function createEpisodeTitle(item) {
+  let episodeTitle = document.createElement("span");
+  episodeTitle.innerHTML = item.episodeTitle;
+  episodeTitle.style.marginBottom = "5px";
+  episodeTitle.style.padding = "5px";
+  episodeTitle.style.fontSize = "1rem";
+  return episodeTitle;
 }
 
 function createEpisodeDescription(item) {
@@ -112,7 +129,7 @@ function createDescriptionContainer() {
   descriptionContainer.style.transitionDuration = ".15s";
   descriptionContainer.style.overflow = "hidden";
   descriptionContainer.style.background = "white";
-  descriptionContainer.style.justifyContent = "center";
+  descriptionContainer.style.justifyContent = "space-between";
   return descriptionContainer;
 }
 

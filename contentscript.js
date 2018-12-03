@@ -43,6 +43,11 @@ episodeDataContainer.forEach((data, index) => {
   }
 }); //added to objectStore
 
+let episodeDescriptionContainer = document.querySelectorAll(".short-desc");
+episodeDescriptionContainer.forEach(
+  (item, index) => (objectStore[index].episodeDescription = item.innerText)
+); //added to objectStore
+
 //objectStore complete
 
 chrome.storage.local.set({ objectStore }, function() {
