@@ -33,15 +33,16 @@ episodeDataContainer.forEach((data, index) => {
   let extractedArray = regexp.exec(data.innerText);
   if (extractedArray !== null) {
     objectStore[index].episodeNumber = extractedArray[1];
-    objectStore[index].episodeDescription = extractedArray[2];
+    objectStore[index].episodeTitle = extractedArray[2];
     //case with episode number
   } else {
     extractedArray = noNumberRegexp.exec(data.innerText);
     objectStore[index].episodeNumber = null;
-    objectStore[index].episodeDescription = extractedArray[1];
+    objectStore[index].episodeTitle = extractedArray[1];
     //case of no episode number
   }
 }); //added to objectStore
+
 //objectStore complete
 
 chrome.storage.local.set({ objectStore }, function() {

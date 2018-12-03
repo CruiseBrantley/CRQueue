@@ -31,7 +31,7 @@ chrome.storage.local.get("objectStore", data => {
         if (expanded) {
           descriptionContainer.style.height = "70px";
         } else {
-          descriptionContainer.style.height = "0";
+          descriptionContainer.style.height = "0px";
         }
       }); //Expand description logic
 
