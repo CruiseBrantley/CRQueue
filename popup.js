@@ -1,74 +1,11 @@
 let objectStore = [];
+let loading = true;
 let targetId = null;
 let page = document.getElementById("seriesDiv");
 
 chrome.storage.local.get("objectStore", data => {
   if (data.objectStore) {
-    objectStore = data.objectStore;
-    console.log(objectStore);
-    let count = 0;
-    for (let item of objectStore) {
-      let linebreak = document.createElement("br");
-      let container = createContainer(count);
-      let episodeNumber = createEpisodeNumber(item);
-      let descriptionContainer = createDescriptionContainer();
-      let episodeTitle = createEpisodeTitle(item);
-      let episodeDescription = createEpisodeDescription(item);
-      let series = createSeries(item);
-
-      series.addEventListener("click", e => {
-        e.stopPropagation();
-        chrome.tabs.update({
-          url: item.episodeURL
-        });
-      }); //URL click handler
-
-      let expanded = false;
-      container.addEventListener("click", () => {
-        expanded = !expanded;
-        if (expanded) {
-          descriptionContainer.style.height = "100px";
-          console.log(descriptionContainer, descriptionContainer.scrollHeight);
-          // while (
-          //   descriptionContainer.offsetHeight <
-          //   descriptionContainer.scrollHeight
-          // ) {
-          //   descriptionContainer.style.height =
-          //     descriptionContainer.offsetHeight + 20 + "px";
-          // }
-        } else {
-          descriptionContainer.style.height = "0px";
-        }
-      }); //Expand description logic
-
-      container.addEventListener("mouseover", () => {
-        series.style.boxShadow = "-7px 7px orange";
-        series.style.border = "1px solid black";
-        series.style.marginLeft = "7px";
-        series.style.textDecoration = null;
-        series.style.background = "white";
-      });
-      container.addEventListener("mouseleave", () => {
-        if (!expanded) {
-          series.style.boxShadow = null;
-          series.style.border = "1px solid transparent";
-          series.style.marginLeft = null;
-          item.watched ? (series.style.textDecoration = "line-through") : null;
-          series.style.background = null;
-        }
-      });
-
-      appendChildren(
-        container,
-        series,
-        linebreak,
-        descriptionContainer,
-        episodeNumber,
-        episodeTitle,
-        episodeDescription
-      );
-      count++;
-    }
+    createQueue(data);
   } else {
     chrome.tabs.create(
       {
@@ -77,13 +14,88 @@ chrome.storage.local.get("objectStore", data => {
         active: false
       },
       tab => {
-        setTimeout(() => {
-          chrome.tabs.remove(tab.id);
-        }, 10000);
+        targetId = tab.id;
+        // setTimeout(() => {
+        //   chrome.tabs.remove(tab.id);
+        // }, 10000);
       }
     );
+    const dataCheck = setInterval(() => {
+      chrome.storage.local.get("objectStore", data => {
+        if (data.objectStore) {
+          loading = false;
+          clearInterval(dataCheck);
+          createQueue(data);
+        }
+      });
+    }, 100);
   }
 });
+function createQueue(data) {
+  loading = false;
+  objectStore = data.objectStore;
+  console.log(objectStore);
+  let count = 0;
+  for (let item of objectStore) {
+    let linebreak = document.createElement("br");
+    let container = createContainer(count);
+    let episodeNumber = createEpisodeNumber(item);
+    let descriptionContainer = createDescriptionContainer();
+    let episodeTitle = createEpisodeTitle(item);
+    let episodeDescription = createEpisodeDescription(item);
+    let series = createSeries(item);
+    series.addEventListener("click", e => {
+      e.stopPropagation();
+      chrome.tabs.update({
+        url: item.episodeURL
+      });
+    }); //URL click handler
+    let expanded = false;
+    container.addEventListener("click", () => {
+      expanded = !expanded;
+      if (expanded) {
+        descriptionContainer.style.height = "100px";
+        console.log(descriptionContainer, descriptionContainer.scrollHeight);
+        // while (
+        //   descriptionContainer.offsetHeight <
+        //   descriptionContainer.scrollHeight
+        // ) {
+        //   descriptionContainer.style.height =
+        //     descriptionContainer.offsetHeight + 20 + "px";
+        // }
+      } else {
+        descriptionContainer.style.height = "0px";
+      }
+    }); //Expand description logic
+    container.addEventListener("mouseover", () => {
+      series.style.boxShadow = "-7px 7px orange";
+      series.style.border = "1px solid black";
+      series.style.marginLeft = "7px";
+      series.style.textDecoration = null;
+      series.style.background = "white";
+    });
+    container.addEventListener("mouseleave", () => {
+      if (!expanded) {
+        series.style.boxShadow = null;
+        series.style.border = "1px solid transparent";
+        series.style.marginLeft = null;
+        item.watched ? (series.style.textDecoration = "line-through") : null;
+        series.style.background = null;
+      }
+    });
+    appendChildren(
+      container,
+      series,
+      linebreak,
+      descriptionContainer,
+      episodeNumber,
+      episodeTitle,
+      episodeDescription
+    );
+    count++;
+  }
+}
+
 function appendChildren(
   container,
   series,
