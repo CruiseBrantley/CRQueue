@@ -9,8 +9,10 @@ chrome.storage.local.get("objectStore", data =>
 
 function loadData(clearData) {
   clearData ? chrome.storage.local.set({ objectStore: null }) : null;
-  let loadingElement = document.createElement("h3");
-  loadingElement.innerHTML = "Loading...";
+  let loadingElement = document.createElement("span");
+  loadingElement.style.fontSize = "1.2rem";
+  loadingElement.innerHTML = "\n\nLoading...";
+  page.appendChild(loadingElement);
 
   chrome.tabs.create(
     {
@@ -25,6 +27,7 @@ function loadData(clearData) {
       if (data.objectStore) {
         loading = false;
         chrome.tabs.remove(targetId);
+        page.removeChild(loadingElement);
         createQueue(data);
         clearInterval(dataCheck);
       }
