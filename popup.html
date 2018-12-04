@@ -2,19 +2,29 @@
 <html>
   <head>
     <style>
-      button {
-        height: 30px;
-        outline: none;
+      html {
+        width: 700px;
       }
       body {
-        width: 700px;
         padding: 20px;
         padding-top: 0px;
+      }
+      h2 {
+        display: inline;
+      }
+      #updateButton {
+        position: absolute;
+        right: 30px;
+        background: none;
+        border: 1px solid black;
+        margin-bottom: 5px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
     <h2>Your Queue:</h2>
+    <button id="updateButton">Update Queue</button>
     <div id="seriesDiv"></div>
     <script src="popup.js"></script>
   </body>

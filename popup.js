@@ -2,13 +2,13 @@ let objectStore = [];
 let loading = true;
 let targetId = null;
 let page = document.getElementById("seriesDiv");
+let reloadQueue = document.getElementById("updateButton");
 
 chrome.storage.local.get("objectStore", data =>
   data.objectStore ? createQueue(data) : loadData()
 );
 
-function loadData(clearData) {
-  clearData ? chrome.storage.local.set({ objectStore: null }) : null;
+function loadData() {
   let loadingElement = document.createElement("span");
   loadingElement.style.fontSize = "1.2rem";
   loadingElement.innerHTML = "\n\nLoading...";
@@ -88,6 +88,12 @@ function createQueue(data) {
         series.style.background = null;
       }
     });
+
+    reloadQueue.addEventListener("click", () => {
+      chrome.storage.local.set({ objectStore: null });
+      window.location.reload();
+    });
+
     appendChildren(
       container,
       series,
