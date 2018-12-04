@@ -89,6 +89,15 @@ function createQueue(data) {
       }
     });
 
+    descriptionContainer.addEventListener("mouseover", () => {
+      descriptionContainer.style.border = "1px solid lightgrey";
+      descriptionContainer.style.borderRadius = "30px";
+    });
+    descriptionContainer.addEventListener("mouseleave", () => {
+      descriptionContainer.style.border = "1px solid transparent";
+      descriptionContainer.style.borderRadius = "0px";
+    });
+
     reloadQueue.addEventListener("click", () => {
       chrome.storage.local.set({ objectStore: null });
       window.location.reload();
@@ -135,8 +144,7 @@ function createSeries(item) {
   series.style.padding = "5px";
   series.style.display = "inline-block";
   series.style.fontSize = "1.2rem";
-  // series.style.cursor = "pointer";
-  series.style.transitionDuration = ".25s";
+  series.style.transitionDuration = ".20s";
   series.style.border = "1px solid transparent";
   series.style.maxWidth = "80%";
   return series;
@@ -148,6 +156,7 @@ function createEpisodeTitle(item) {
   episodeTitle.style.marginBottom = "5px";
   episodeTitle.style.padding = "5px";
   episodeTitle.style.fontSize = "1.2rem";
+  episodeTitle.style.fontWeight = "600";
   return episodeTitle;
 }
 
@@ -176,11 +185,12 @@ function createDescriptionContainer() {
   descriptionContainer.style.display = "flex";
   descriptionContainer.style.alignItems = "center";
   descriptionContainer.style.height = "0px";
-  descriptionContainer.style.transitionDuration = ".15s";
+  descriptionContainer.style.transitionDuration = ".3s";
   descriptionContainer.style.cursor = "pointer";
   descriptionContainer.style.overflow = "hidden";
   descriptionContainer.style.background = "white";
   descriptionContainer.style.justifyContent = "space-between";
+  descriptionContainer.style.border = "1px solid transparent";
   return descriptionContainer;
 }
 
@@ -192,6 +202,7 @@ function createEpisodeNumber(item) {
   episodeNumber.style.padding = "5px";
   episodeNumber.style.display = "inline-block";
   episodeNumber.style.fontSize = "1.2rem";
+  episodeNumber.style.fontWeight = "600";
   return episodeNumber;
 }
 
@@ -203,6 +214,5 @@ function createContainer(count) {
     : (container.style.background = "oldlace");
   container.style.marginBottom = "2px";
   container.style.userSelect = "none";
-  container.style.transitionDuration = ".25s";
   return container;
 }
