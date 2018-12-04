@@ -54,24 +54,21 @@ function createQueue(data) {
       chrome.tabs.update({
         url: item.episodeURL
       });
+      expandFunction();
+      descriptionContainer.style.marginLeft = "100%";
+      setTimeout(() => (descriptionContainer.style.marginLeft = "0px"), 500);
     }); //URL click handler
     let expanded = false;
-    container.addEventListener("click", () => {
+    container.addEventListener("click", () => expandFunction());
+
+    function expandFunction() {
       expanded = !expanded;
       if (expanded) {
         descriptionContainer.style.height = "100px";
-        console.log(descriptionContainer, descriptionContainer.scrollHeight);
-        // while (
-        //   descriptionContainer.offsetHeight <
-        //   descriptionContainer.scrollHeight
-        // ) {
-        //   descriptionContainer.style.height =
-        //     descriptionContainer.offsetHeight + 20 + "px";
-        // }
       } else {
         descriptionContainer.style.height = "0px";
       }
-    }); //Expand description logic
+    } //Expand description logic
 
     container.addEventListener("mouseover", () => {
       series.style.boxShadow = "-7px 7px orange";
