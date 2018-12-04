@@ -56,7 +56,10 @@ function createQueue(data) {
       });
       expandFunction();
       descriptionContainer.style.marginLeft = "100%";
-      setTimeout(() => (descriptionContainer.style.marginLeft = "0px"), 500);
+      setTimeout(() => {
+        descriptionContainer.style.marginLeft = "0px";
+        window.close();
+      }, 500);
     }); //URL click handler
     let expanded = false;
     container.addEventListener("click", () => expandFunction());
