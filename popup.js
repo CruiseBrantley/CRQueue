@@ -72,6 +72,7 @@ function createQueue(data) {
         descriptionContainer.style.height = "0px";
       }
     }); //Expand description logic
+
     container.addEventListener("mouseover", () => {
       series.style.boxShadow = "-7px 7px orange";
       series.style.border = "1px solid black";
@@ -84,19 +85,24 @@ function createQueue(data) {
         series.style.boxShadow = null;
         series.style.border = "1px solid transparent";
         series.style.marginLeft = null;
-        // item.watched ? (series.style.textDecoration = "line-through") : null;
         series.style.background = null;
       }
-    });
+    }); //Title popout hover
 
     descriptionContainer.addEventListener("mouseover", () => {
       descriptionContainer.style.border = "1px solid lightgrey";
-      descriptionContainer.style.borderRadius = "30px";
+      descriptionContainer.style.borderTopLeftRadius = "30px";
+      descriptionContainer.style.borderBottomLeftRadius = "30px";
+      descriptionContainer.style.paddingLeft = "10px";
+      descriptionContainer.style.marginRight = "-10px";
     });
     descriptionContainer.addEventListener("mouseleave", () => {
       descriptionContainer.style.border = "1px solid transparent";
-      descriptionContainer.style.borderRadius = "0px";
-    });
+      descriptionContainer.style.borderTopLeftRadius = "0px";
+      descriptionContainer.style.borderBottomLeftRadius = "0px";
+      descriptionContainer.style.paddingLeft = "0px";
+      descriptionContainer.style.marginRight = "0px";
+    }); //descriptionContainer buttonlike hover
 
     reloadQueue.addEventListener("click", () => {
       chrome.storage.local.set({ objectStore: null });
