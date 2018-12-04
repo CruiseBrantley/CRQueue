@@ -1,7 +1,7 @@
 {
   "name": "CRQueue",
-  "version": "1.0",
-  "description": "Grab your CrunchyRoll queue",
+  "version": "0.0.0.1",
+  "description": "View your Crunchyroll queue from any tab",
   "permissions": ["activeTab", "declarativeContent", "storage", "tabs"],
   "background": {
     "scripts": ["background.js"],
@@ -11,7 +11,6 @@
     {
       "matches": [
         "https://www.crunchyroll.com/home/queue",
-        "http://www.crunchyroll.com/home/queue",
         "https://www.crunchyroll.com/login?next=%2Fhome%2Fqueue"
       ],
       "js": ["contentScript.js"]
