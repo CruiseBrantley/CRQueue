@@ -1,2 +1,3 @@
 # CRQueue
-Crunchyroll Queue Exporter
+
+Crunchyroll Queue Viewer
