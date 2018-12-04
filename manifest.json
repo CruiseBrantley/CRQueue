@@ -11,7 +11,8 @@
     {
       "matches": [
         "https://www.crunchyroll.com/home/queue",
-        "http://www.crunchyroll.com/home/queue"
+        "http://www.crunchyroll.com/home/queue",
+        "https://www.crunchyroll.com/login?next=%2Fhome%2Fqueue"
       ],
       "js": ["contentScript.js"]
     }

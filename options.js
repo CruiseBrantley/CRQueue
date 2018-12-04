@@ -5,9 +5,12 @@ function constructOptions(kButtonColors) {
     let button = document.createElement("button");
     button.style.backgroundColor = item;
     button.addEventListener("click", function() {
-      chrome.storage.local.set({ objectStore: null }, function() {
-        console.log("Set objectStore.");
-      });
+      chrome.storage.local.set(
+        { objectStore: null, loggedIn: null },
+        function() {
+          console.log("Set objectStore.");
+        }
+      );
     });
     page.appendChild(button);
   }

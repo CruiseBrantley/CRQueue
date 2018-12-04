@@ -3,15 +3,19 @@ let loading = true;
 let targetId = null;
 let page = document.getElementById("seriesDiv");
 let reloadQueue = document.getElementById("updateButton");
+reloadQueueClick();
 
-chrome.storage.local.get("objectStore", data =>
-  data.objectStore ? createQueue(data) : loadData()
+let loadingElement = document.createElement("span");
+loadingElement.style.fontSize = "1.2rem";
+loadingElement.innerHTML = "\n\nLoading...";
+
+chrome.storage.local.get(["objectStore", "loggedIn"], data =>
+  data.objectStore && data.objectStore !== undefined && data.loggedIn
+    ? createQueue(data)
+    : loadData()
 );
 
 function loadData() {
-  let loadingElement = document.createElement("span");
-  loadingElement.style.fontSize = "1.2rem";
-  loadingElement.innerHTML = "\n\nLoading...";
   page.appendChild(loadingElement);
 
   chrome.tabs.create(
@@ -23,13 +27,37 @@ function loadData() {
     tab => (targetId = tab.id)
   );
   const dataCheck = setInterval(() => {
-    chrome.storage.local.get("objectStore", data => {
+    chrome.storage.local.get(["objectStore", "loggedIn"], data => {
       if (data.objectStore) {
         loading = false;
         chrome.tabs.remove(targetId);
         page.removeChild(loadingElement);
         createQueue(data);
         clearInterval(dataCheck);
+      }
+      if (
+        data.loggedIn === false &&
+        (data.objectStore === false || data.objectStore === [])
+      ) {
+        chrome.storage.local.set({ objectStore: null, loggedIn: null });
+        page.removeChild(loadingElement);
+        let loggedOutElement = document.createElement("span");
+        loggedOutElement.style.fontSize = "1.2rem";
+        loggedOutElement.innerHTML =
+          "\n\nPlease log in to Cunchyroll then try again";
+        page.appendChild(loggedOutElement);
+        clearInterval(dataCheck);
+        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+          if (
+            tabs[0].url !=
+            "https://www.crunchyroll.com/login?next=%2Fhome%2Fqueue"
+          ) {
+            setTimeout(
+              () => chrome.tabs.update(targetId, { highlighted: true }),
+              2000
+            );
+          } else chrome.tabs.remove(targetId);
+        });
       }
     });
   }, 100);
@@ -38,7 +66,6 @@ function loadData() {
 function createQueue(data) {
   loading = false;
   objectStore = data.objectStore;
-  console.log(objectStore);
   let count = 0;
   for (let item of objectStore) {
     const linebreak = document.createElement("br");
@@ -107,11 +134,6 @@ function createQueue(data) {
       descriptionContainer.style.marginRight = "0px";
     }); //descriptionContainer buttonlike hover
 
-    reloadQueue.addEventListener("click", () => {
-      chrome.storage.local.set({ objectStore: null });
-      window.location.reload();
-    });
-
     appendChildren(
       container,
       series,
@@ -124,6 +146,13 @@ function createQueue(data) {
     );
     count++;
   }
+}
+
+function reloadQueueClick() {
+  reloadQueue.addEventListener("click", () => {
+    chrome.storage.local.set({ objectStore: null, loggedIn: null });
+    window.location.reload();
+  });
 }
 
 function appendChildren(
