@@ -49,7 +49,7 @@ function createQueue(data) {
     const episodeDescription = createEpisodeDescription(item);
     const series = createSeries(item);
     const check = createCheck(item);
-    series.addEventListener("click", e => {
+    descriptionContainer.addEventListener("click", e => {
       e.stopPropagation();
       chrome.tabs.update({
         url: item.episodeURL
@@ -130,13 +130,12 @@ function appendChildren(
 
 function createSeries(item) {
   let series = document.createElement("span");
-  // item.watched ? (series.style.textDecoration = "line-through") : null;
   series.innerHTML = item.title;
   series.style.marginBottom = "5px";
   series.style.padding = "5px";
   series.style.display = "inline-block";
   series.style.fontSize = "1.2rem";
-  series.style.cursor = "pointer";
+  // series.style.cursor = "pointer";
   series.style.transitionDuration = ".25s";
   series.style.border = "1px solid transparent";
   series.style.maxWidth = "80%";
@@ -148,7 +147,7 @@ function createEpisodeTitle(item) {
   episodeTitle.innerHTML = item.episodeTitle;
   episodeTitle.style.marginBottom = "5px";
   episodeTitle.style.padding = "5px";
-  episodeTitle.style.fontSize = "1rem";
+  episodeTitle.style.fontSize = "1.2rem";
   return episodeTitle;
 }
 
@@ -168,7 +167,7 @@ function createEpisodeDescription(item) {
   episodeDescription.innerHTML = item.episodeDescription;
   episodeDescription.style.marginBottom = "5px";
   episodeDescription.style.padding = "5px";
-  episodeDescription.style.fontSize = "1rem";
+  episodeDescription.style.fontSize = "1.2rem";
   return episodeDescription;
 }
 
@@ -178,6 +177,7 @@ function createDescriptionContainer() {
   descriptionContainer.style.alignItems = "center";
   descriptionContainer.style.height = "0px";
   descriptionContainer.style.transitionDuration = ".15s";
+  descriptionContainer.style.cursor = "pointer";
   descriptionContainer.style.overflow = "hidden";
   descriptionContainer.style.background = "white";
   descriptionContainer.style.justifyContent = "space-between";
@@ -191,14 +191,16 @@ function createEpisodeNumber(item) {
   episodeNumber.style.marginBottom = "5px";
   episodeNumber.style.padding = "5px";
   episodeNumber.style.display = "inline-block";
-  episodeNumber.style.fontSize = "1rem";
+  episodeNumber.style.fontSize = "1.2rem";
   return episodeNumber;
 }
 
 function createContainer(count) {
   let container = document.createElement("div");
   container.style.width = "100%";
-  !(count % 2) ? (container.style.background = "rgba(252,181,2,.44)") : null;
+  !(count % 2)
+    ? (container.style.background = "rgba(252,181,2,.44)")
+    : (container.style.background = "oldlace");
   container.style.marginBottom = "2px";
   container.style.userSelect = "none";
   container.style.transitionDuration = ".25s";
