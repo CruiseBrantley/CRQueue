@@ -49,6 +49,8 @@ function createQueue(data) {
     const episodeDescription = createEpisodeDescription(item);
     const series = createSeries(item);
     const check = createCheck(item);
+    let expanded = false;
+
     descriptionContainer.addEventListener("click", e => {
       e.stopPropagation();
       chrome.tabs.update({
@@ -61,17 +63,18 @@ function createQueue(data) {
         window.close();
       }, 500);
     }); //URL click handler
-    let expanded = false;
     container.addEventListener("click", () => expandFunction());
 
     function expandFunction() {
       expanded = !expanded;
       if (expanded) {
         descriptionContainer.style.height = "100px";
+        descriptionContainer.style.border = "1px solid transparent";
       } else {
         descriptionContainer.style.height = "0px";
+        descriptionContainer.style.border = null;
       }
-    } //Expand description logic
+    } //expand description logic
 
     container.addEventListener("mouseover", () => {
       series.style.boxShadow = "-7px 7px orange";
@@ -196,7 +199,6 @@ function createDescriptionContainer() {
   descriptionContainer.style.overflow = "hidden";
   descriptionContainer.style.background = "white";
   descriptionContainer.style.justifyContent = "space-between";
-  descriptionContainer.style.border = "1px solid transparent";
   return descriptionContainer;
 }
 
