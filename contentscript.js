@@ -1,5 +1,5 @@
 //check if user is signed in
-if (document.getElementById("__lpform_login_form_name") != null) {
+if (document.querySelectorAll(".login-or-signup-page").length) {
   chrome.storage.local.set({ objectStore: false, loggedIn: false }, () => {
     console.log("Not Logged In");
   });
