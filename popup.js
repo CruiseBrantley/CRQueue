@@ -120,18 +120,22 @@ function createQueue(data) {
     }); //Title popout hover
 
     descriptionContainer.addEventListener("mouseover", () => {
+      descriptionContainer.style.display = "absolute";
       descriptionContainer.style.border = "1px solid lightgrey";
       descriptionContainer.style.borderTopLeftRadius = "30px";
       descriptionContainer.style.borderBottomLeftRadius = "30px";
       descriptionContainer.style.paddingLeft = "10px";
       descriptionContainer.style.marginRight = "-10px";
+      descriptionContainer.style.boxShadow = "-10px 10px 30px lightgrey";
     });
     descriptionContainer.addEventListener("mouseleave", () => {
+      descriptionContainer.style.display = "flex";
       descriptionContainer.style.border = "1px solid transparent";
       descriptionContainer.style.borderTopLeftRadius = "0px";
       descriptionContainer.style.borderBottomLeftRadius = "0px";
       descriptionContainer.style.paddingLeft = "0px";
       descriptionContainer.style.marginRight = "0px";
+      descriptionContainer.style.boxShadow = null;
     }); //descriptionContainer buttonlike hover
 
     appendChildren(
