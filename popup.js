@@ -76,7 +76,8 @@ function createQueue(data) {
     const episodeDescription = createEpisodeDescription(item);
     const series = createSeries(item);
     const check = createCheck(item);
-    let expanded = false;
+    const textSubcontainer = createTextSubcontainer();
+    const image = createEpisodeImage(item);
 
     descriptionContainer.addEventListener("click", e => {
       e.stopPropagation();
@@ -94,23 +95,22 @@ function createQueue(data) {
 
     function expandFunction() {
       if (globalExpanded() !== descriptionContainer) {
-        item.episodeDescription.length > 50
-          ? (descriptionContainer.style.height = "130px")
-          : (descriptionContainer.style.height = "80px");
-        descriptionContainer.style.border = "1px solid transparent";
+        // item.episodeDescription.length > 50
+        //   ? (descriptionContainer.style.height = "130px")
+        //   : (descriptionContainer.style.height = "80px");
+        descriptionContainer.style.height = "90px";
         globalExpanded = () => {
           descriptionContainer.style.height = "0px";
-          descriptionContainer.style.border = null;
           return descriptionContainer;
         };
       } else globalExpanded = () => null;
     } //expand description logic
 
-    seriesMouseover(container, series);
-    seriesMouseleave(container, expanded, series); //Series expand hover
+    seriesMouseover(container, series, check);
+    seriesMouseleave(container, count, check); //Series expand hover
 
     descriptionContainerMouseover(descriptionContainer);
-    descriptionContainerMouseleave(descriptionContainer, expanded); //descriptionContainer buttonlike hover
+    descriptionContainerMouseleave(descriptionContainer); //descriptionContainer buttonlike hover
 
     appendChildren(
       container,
@@ -119,55 +119,64 @@ function createQueue(data) {
       descriptionContainer,
       episodeTitle,
       episodeDescription,
-      check
+      check,
+      textSubcontainer,
+      image
     );
     count++;
   }
 }
 
-function descriptionContainerMouseleave(descriptionContainer, expanded) {
+function descriptionContainerMouseover(descriptionContainer) {
+  descriptionContainer.addEventListener("mouseover", () => {
+    descriptionContainer.style.borderTopLeftRadius = "30px";
+    descriptionContainer.style.borderBottomLeftRadius = "30px";
+    descriptionContainer.style.paddingLeft = "10px";
+    descriptionContainer.style.marginLeft = "10px";
+    descriptionContainer.style.marginRight = "-20px";
+    descriptionContainer.style.boxShadow = "-10px 10px 30px rgba(0, 0, 0, 0.5)";
+  });
+}
+
+function descriptionContainerMouseleave(descriptionContainer) {
   descriptionContainer.addEventListener("mouseleave", () => {
-    expanded === true
-      ? (descriptionContainer.style.border = "1px solid transparent")
-      : (descriptionContainer.style.border = null);
     descriptionContainer.style.borderTopLeftRadius = "0px";
     descriptionContainer.style.borderBottomLeftRadius = "0px";
     descriptionContainer.style.paddingLeft = "0px";
     descriptionContainer.style.marginRight = "0px";
+    descriptionContainer.style.marginLeft = "0px";
     descriptionContainer.style.boxShadow = null;
   });
 }
 
-function descriptionContainerMouseover(descriptionContainer) {
-  descriptionContainer.addEventListener("mouseover", () => {
-    descriptionContainer.style.border = "1px solid lightgrey";
-    descriptionContainer.style.borderTopLeftRadius = "30px";
-    descriptionContainer.style.borderBottomLeftRadius = "30px";
-    descriptionContainer.style.paddingLeft = "10px";
-    descriptionContainer.style.marginRight = "-10px";
-    descriptionContainer.style.boxShadow = "-10px 10px 30px lightgrey";
-  });
-}
-
-function seriesMouseleave(container, expanded, series) {
-  container.addEventListener("mouseleave", () => {
-    if (!expanded) {
-      // series.style.boxShadow = null;
-      // series.style.border = "1px solid transparent";
-      // series.style.marginLeft = null;
-      // series.style.background = null;
-      setTimeout(() => (series.style.fontSize = "1.2rem"), 100);
-    }
-  });
-}
-
-function seriesMouseover(container, series) {
+function seriesMouseover(container, series, check) {
   container.addEventListener("mouseover", () => {
     // series.style.boxShadow = "-7px 7px orange";
     // series.style.border = "1px solid black";
     // series.style.marginLeft = "7px";
     // series.style.background = "white";
-    series.style.fontSize = "1.5rem";
+    // series.style.fontSize = "1.5rem";
+    container.style.background = "rgba(255,165,0,.84)";
+    container.style.marginLeft = "-10px";
+    container.style.boxShadow = "-10px 10px 30px rgba(0, 0, 0, 0.5)";
+    container.style.transitionDuration = null;
+
+    check.style.right = "60px";
+    check.style.transitionDuration = null;
+  });
+}
+
+function seriesMouseleave(container, count, check) {
+  container.addEventListener("mouseleave", () => {
+    container.style.transitionDuration = ".5s";
+    container.style.marginLeft = null;
+    container.style.boxShadow = null;
+    !(count % 2)
+      ? (container.style.background = "rgba(255,165,0,.44)")
+      : (container.style.background = "rgba(255,165,0,.15)");
+
+    check.style.transitionDuration = ".5s";
+    check.style.right = "50px";
   });
 }
 
@@ -185,15 +194,19 @@ function appendChildren(
   descriptionContainer,
   episodeTitle,
   episodeDescription,
-  check
+  check,
+  textSubcontainer,
+  image
 ) {
   page.appendChild(container);
   container.appendChild(series);
   container.appendChild(check);
   container.appendChild(linebreak);
   container.appendChild(descriptionContainer);
-  descriptionContainer.appendChild(episodeTitle);
-  descriptionContainer.appendChild(episodeDescription);
+  descriptionContainer.appendChild(textSubcontainer);
+  descriptionContainer.appendChild(image);
+  textSubcontainer.appendChild(episodeTitle);
+  textSubcontainer.appendChild(episodeDescription);
 }
 
 function createSeries(item) {
@@ -205,6 +218,7 @@ function createSeries(item) {
   series.style.padding = "5px";
   series.style.display = "inline-block";
   series.style.fontSize = "1.2rem";
+  series.style.fontWeight = "600";
   series.style.transitionDuration = ".3s";
   series.style.maxWidth = "80%";
   return series;
@@ -213,13 +227,17 @@ function createSeries(item) {
 function createEpisodeTitle(item) {
   let episodeTitle = document.createElement("span");
   episodeTitle.innerHTML =
-    item.episodeTitle.length > 50
-      ? "Ep." +
-        item.episodeNumber +
-        " " +
-        item.episodeTitle.substring(0, 50) +
-        "..."
-      : "Ep." + item.episodeNumber + " " + item.episodeTitle;
+    // item.episodeTitle.length > 50
+    //   ? "Ep." +
+    //     item.episodeNumber +
+    //     " " +
+    //     item.episodeTitle.substring(0, 50) +
+    //     "..."
+    //   :
+    "Ep." +
+    (item.episodeNumber ? item.episodeNumber : "SP") +
+    " " +
+    item.episodeTitle;
   episodeTitle.style.marginBottom = "5px";
   episodeTitle.style.marginLeft = "20px";
   episodeTitle.style.padding = "5px";
@@ -256,16 +274,31 @@ function createEpisodeDescription(item) {
 function createDescriptionContainer() {
   let descriptionContainer = document.createElement("div");
   descriptionContainer.style.display = "flex";
-  descriptionContainer.style.flexDirection = "column";
-  descriptionContainer.style.alignItems = "center";
+  descriptionContainer.style.flexDirection = "row";
+  descriptionContainer.style.justifyContent = "space-between";
   descriptionContainer.style.height = "0px";
   descriptionContainer.style.transitionDuration = ".3s";
   descriptionContainer.style.cursor = "pointer";
   descriptionContainer.style.overflow = "hidden";
   descriptionContainer.style.background = "white";
-  descriptionContainer.style.justifyContent = "start";
-  descriptionContainer.style.alignItems = "start";
   return descriptionContainer;
+}
+
+function createTextSubcontainer() {
+  let textSubcontainer = document.createElement("div");
+  textSubcontainer.style.display = "flex";
+  textSubcontainer.style.maxWidth = "482px";
+  textSubcontainer.style.alignItems = "center";
+  textSubcontainer.style.justifyContent = "start";
+  textSubcontainer.style.alignItems = "start";
+  return textSubcontainer;
+}
+
+function createEpisodeImage(item) {
+  let episodeImage = document.createElement("img");
+  episodeImage.src = item.episodeImage;
+  episodeImage.style.height = "90px";
+  return episodeImage;
 }
 
 function createEpisodeNumber(item) {
@@ -284,9 +317,9 @@ function createContainer(count) {
   let container = document.createElement("div");
   container.style.width = "100%";
   !(count % 2)
-    ? (container.style.background = "rgba(252,181,2,.44)")
-    : (container.style.background = "oldlace");
-  // container.style.marginBottom = "2px";
+    ? (container.style.background = "rgba(255,165,0,.44)")
+    : (container.style.background = "rgba(255,165,0,.15)");
+  container.style.transitionDuration = ".3s";
   container.style.userSelect = "none";
   return container;
 }
