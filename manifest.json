@@ -1,6 +1,6 @@
 {
   "name": "CRQueue",
-  "version": "0.0.0.5",
+  "version": "0.0.0.6",
   "description": "View your Crunchyroll queue from any tab",
   "permissions": ["activeTab", "declarativeContent", "storage", "tabs"],
   "background": {
