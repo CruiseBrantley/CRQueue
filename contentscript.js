@@ -56,6 +56,13 @@ if (document.querySelectorAll(".login-or-signup-page").length) {
     (item, index) => (objectStore[index].episodeDescription = item.innerText)
   ); //added to objectStore
 
+  let episodeImageContainer = document.querySelectorAll(
+    ".landscape:not(.left)"
+  );
+  episodeImageContainer.forEach(
+    (item, index) => (objectStore[index].episodeImage = item.src)
+  ); //added to objectStore
+  console.log(objectStore);
   //objectStore complete
 
   chrome.storage.local.set({ objectStore, loggedIn: true }, () => {
