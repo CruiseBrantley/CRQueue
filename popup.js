@@ -129,10 +129,7 @@ function createQueue(data) {
 
 function descriptionContainerMouseover(descriptionContainer) {
   descriptionContainer.addEventListener("mouseover", () => {
-    descriptionContainer.style.borderTopLeftRadius = "30px";
-    descriptionContainer.style.borderBottomLeftRadius = "30px";
-    descriptionContainer.style.paddingLeft = "10px";
-    descriptionContainer.style.marginLeft = "10px";
+    descriptionContainer.style.marginLeft = "20px";
     descriptionContainer.style.marginRight = "-20px";
     descriptionContainer.style.boxShadow = "-10px 10px 30px rgba(0, 0, 0, 0.5)";
   });
@@ -140,9 +137,6 @@ function descriptionContainerMouseover(descriptionContainer) {
 
 function descriptionContainerMouseleave(descriptionContainer) {
   descriptionContainer.addEventListener("mouseleave", () => {
-    descriptionContainer.style.borderTopLeftRadius = "0px";
-    descriptionContainer.style.borderBottomLeftRadius = "0px";
-    descriptionContainer.style.paddingLeft = "0px";
     descriptionContainer.style.marginRight = "0px";
     descriptionContainer.style.marginLeft = "0px";
     descriptionContainer.style.boxShadow = null;
@@ -151,11 +145,6 @@ function descriptionContainerMouseleave(descriptionContainer) {
 
 function seriesMouseover(container, series, check) {
   container.addEventListener("mouseover", () => {
-    // series.style.boxShadow = "-7px 7px orange";
-    // series.style.border = "1px solid black";
-    // series.style.marginLeft = "7px";
-    // series.style.background = "white";
-    // series.style.fontSize = "1.5rem";
     container.style.background = "rgba(255,165,0,.84)";
     container.style.marginLeft = "-10px";
     container.style.boxShadow = "-10px 10px 30px rgba(0, 0, 0, 0.5)";
