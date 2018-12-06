@@ -98,7 +98,7 @@ function createQueue(data) {
         // item.episodeDescription.length > 50
         //   ? (descriptionContainer.style.height = "130px")
         //   : (descriptionContainer.style.height = "80px");
-        descriptionContainer.style.height = "90px";
+        descriptionContainer.style.height = "100px";
         globalExpanded = () => {
           descriptionContainer.style.height = "0px";
           return descriptionContainer;
@@ -228,7 +228,6 @@ function createEpisodeTitle(item) {
     " " +
     item.episodeTitle;
   episodeTitle.style.marginBottom = "5px";
-  episodeTitle.style.marginLeft = "20px";
   episodeTitle.style.padding = "5px";
   episodeTitle.style.fontSize = "1.2rem";
   episodeTitle.style.fontWeight = "600";
@@ -255,7 +254,6 @@ function createEpisodeDescription(item) {
     : (episodeDescription.innerHTML = item.episodeDescription);
   episodeDescription.style.marginBottom = "5px";
   episodeDescription.style.padding = "5px";
-  episodeDescription.style.marginLeft = "20px";
   episodeDescription.style.fontSize = "1.2rem";
   return episodeDescription;
 }
@@ -276,7 +274,7 @@ function createDescriptionContainer() {
 function createTextSubcontainer() {
   let textSubcontainer = document.createElement("div");
   textSubcontainer.style.display = "flex";
-  textSubcontainer.style.maxWidth = "482px";
+  textSubcontainer.style.flexDirection = "column";
   textSubcontainer.style.alignItems = "center";
   textSubcontainer.style.justifyContent = "start";
   textSubcontainer.style.alignItems = "start";
@@ -286,7 +284,7 @@ function createTextSubcontainer() {
 function createEpisodeImage(item) {
   let episodeImage = document.createElement("img");
   episodeImage.src = item.episodeImage;
-  episodeImage.style.height = "90px";
+  episodeImage.style.height = "100px";
   return episodeImage;
 }
 
