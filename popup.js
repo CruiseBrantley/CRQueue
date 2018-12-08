@@ -1,5 +1,6 @@
 let loading = true;
 let targetId = null;
+let clickFlag = false;
 let globalExpanded = () => null; //holds callback to last expanded description
 const page = document.getElementById("seriesDiv");
 const reloadQueue = document.getElementById("updateButton");
@@ -81,15 +82,17 @@ function createQueue(data) {
 
     descriptionContainer.addEventListener("click", e => {
       e.stopPropagation();
+      clickFlag = true;
       chrome.tabs.update({
         url: item.episodeURL
       });
-      expandFunction();
-      descriptionContainer.style.marginLeft = "100%";
+      // expandFunction();
+      descriptionContainer.style.animationDuration = "250ms";
+      descriptionContainer.style.marginLeft = "120%";
       setTimeout(() => {
-        descriptionContainer.style.marginLeft = "0px";
+        // descriptionContainer.style.marginLeft = "0px";
         window.close();
-      }, 500);
+      }, 300);
     }); //URL click handler
     container.addEventListener("click", () => expandFunction());
 
@@ -137,9 +140,11 @@ function descriptionContainerMouseover(descriptionContainer) {
 
 function descriptionContainerMouseleave(descriptionContainer) {
   descriptionContainer.addEventListener("mouseleave", () => {
-    descriptionContainer.style.marginRight = "0px";
-    descriptionContainer.style.marginLeft = "0px";
-    descriptionContainer.style.boxShadow = null;
+    if (!clickFlag) {
+      descriptionContainer.style.marginRight = "0px";
+      descriptionContainer.style.marginLeft = "0px";
+      descriptionContainer.style.boxShadow = null;
+    }
   });
 }
 
