@@ -2,8 +2,10 @@ let loading = true;
 let targetId = null;
 let clickFlag = false;
 let globalExpanded = () => null; //holds callback to last expanded description
-const page = document.getElementById("seriesDiv");
+let page = document.getElementById("seriesDiv");
 const reloadQueue = document.getElementById("updateButton");
+const sort = document.getElementById("sortButton");
+const search = document.getElementById("searchInput");
 reloadQueueClick();
 
 const loadingElement = document.createElement("span");
@@ -66,12 +68,24 @@ function loadData() {
 
 function createQueue(data) {
   loading = false;
-  objectStore = data.objectStore;
+  let objectStore = data.objectStore;
+
+  sort.addEventListener("click", () => sortTitles(objectStore));
+
+  search.addEventListener("input", e => searchTitles(e, objectStore));
+
+  renderTitles(objectStore);
+}
+
+function renderTitles(renderStore) {
   let count = 0;
-  for (let item of objectStore) {
+  console.log(renderStore);
+  while (page.firstChild) {
+    page.removeChild(page.firstChild);
+  }
+  for (let item of renderStore) {
     const linebreak = document.createElement("br");
     const container = createContainer(count);
-    // const episodeNumber = createEpisodeNumber(item);
     const descriptionContainer = createDescriptionContainer();
     const episodeTitle = createEpisodeTitle(item);
     const episodeDescription = createEpisodeDescription(item);
@@ -79,7 +93,6 @@ function createQueue(data) {
     const check = createCheck(item);
     const textSubcontainer = createTextSubcontainer();
     const image = createEpisodeImage(item);
-
     descriptionContainer.addEventListener("click", e => {
       e.stopPropagation();
       clickFlag = true;
@@ -95,7 +108,6 @@ function createQueue(data) {
       }, 300);
     }); //URL click handler
     container.addEventListener("click", () => expandFunction());
-
     function expandFunction() {
       if (globalExpanded() !== descriptionContainer) {
         // item.episodeDescription.length > 50
@@ -108,13 +120,10 @@ function createQueue(data) {
         };
       } else globalExpanded = () => null;
     } //expand description logic
-
     seriesMouseover(container, series, check);
     seriesMouseleave(container, count, check); //Series expand hover
-
     descriptionContainerMouseover(descriptionContainer);
     descriptionContainerMouseleave(descriptionContainer); //descriptionContainer buttonlike hover
-
     appendChildren(
       container,
       series,
@@ -128,6 +137,59 @@ function createQueue(data) {
     );
     count++;
   }
+}
+
+function isSorted(arr) {
+  let len = arr.length - 1;
+  for (let i = 0; i < len; ++i) {
+    if (arr[i].title.toLowerCase() > arr[i + 1].title.toLowerCase()) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function sortTitles(data) {
+  const baseList = data;
+  let sortedList;
+  if (isSorted(baseList))
+    sortedList = data.sort((a, b) => {
+      var titleA = a.title.toLowerCase(); // ignore upper and lowercase
+      var titleB = b.title.toLowerCase(); // ignore upper and lowercase
+      if (titleA < titleB) {
+        return 1;
+      }
+      if (titleA > titleB) {
+        return -1;
+      }
+      return 0;
+    });
+  else
+    sortedList = data.sort((a, b) => {
+      var titleA = a.title.toLowerCase(); // ignore upper and lowercase
+      var titleB = b.title.toLowerCase(); // ignore upper and lowercase
+      if (titleA < titleB) {
+        return -1;
+      }
+      if (titleA > titleB) {
+        return 1;
+      }
+      return 0;
+    });
+  console.log(sortedList);
+  renderTitles(sortedList);
+}
+
+function searchTitles(e, objectStore) {
+  let filtered = objectStore.filter(p => {
+    let lowerText = p.episodeTitle.toLowerCase();
+    let lowerTitle = p.title.toLowerCase();
+    return (
+      lowerText.includes(e.target.value.toLowerCase()) ||
+      lowerTitle.includes(e.target.value.toLowerCase())
+    );
+  });
+  renderTitles(filtered);
 }
 
 function descriptionContainerMouseover(descriptionContainer) {
