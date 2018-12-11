@@ -182,10 +182,10 @@ function sortTitles(data) {
 
 function searchTitles(e, objectStore) {
   let filtered = objectStore.filter(p => {
-    let lowerText = p.episodeTitle.toLowerCase();
+    // let lowerText = p.episodeTitle.toLowerCase();
     let lowerTitle = p.title.toLowerCase();
     return (
-      lowerText.includes(e.target.value.toLowerCase()) ||
+      // lowerText.includes(e.target.value.toLowerCase()) ||
       lowerTitle.includes(e.target.value.toLowerCase())
     );
   });
