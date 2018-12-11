@@ -11,22 +11,32 @@
       }
       h2 {
         display: inline;
+        margin: 0;
       }
       #seriesDiv {
         margin-top: 10px;
       }
-      #updateButton {
-        position: absolute;
-        right: 30px;
-        background: none;
+      button {
+        background: rgba(255,165,0,.44);
         border: 1px solid black;
-        margin-bottom: 5px;
         cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: rgba(255,165,0,.84);
+      }
+      input {
+        border: 1px solid black;
+        color: black;
+        margin: 5px;
+      }
+      #topDiv {
+        display: flex;
+        justify-content: space-between;
       }
       /* width */
       ::-webkit-scrollbar {
         width: 10px;
-        /* background-color: rgba(255, 255, 255, 0.1); */
       }
       /* Handle */
       ::-webkit-scrollbar-thumb {
@@ -39,10 +49,14 @@
     </style>
   </head>
   <body>
-    <h2>Your Queue:</h2>
-    <button id="sortButton">Sort</button>
-    <input id="searchInput" placeholder="Search Here"></input>
-    <button id="updateButton">Update Queue</button>
+    <div id="topDiv">
+      <h2>Your Queue:</h2>
+      <div style="display: flex">
+        <button id="sortButton">Sort</button>
+        <input id="searchInput" placeholder="Search Here"></input>
+        <button id="updateButton">Update Queue</button>
+      </div>
+    </div>
     <div id="seriesDiv"></div>
     <script src="popup.js"></script>
   </body>
