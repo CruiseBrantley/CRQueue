@@ -53,7 +53,8 @@ function loadData() {
         chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
           if (
             tabs[0].url !=
-            "https://www.crunchyroll.com/login?next=%2Fhome%2Fqueue"
+              "https://www.crunchyroll.com/login?next=%2Fhome%2Fqueue" ||
+            tabs[0].url != "https://www.crunchyroll.com/login"
           ) {
             setTimeout(
               () => chrome.tabs.update(targetId, { highlighted: true }),
