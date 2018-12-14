@@ -1,71 +1,26 @@
-//check if user is signed in
-if (document.querySelectorAll(".login-or-signup-page").length) {
-  chrome.storage.local.set({ objectStore: false, loggedIn: false }, () => {
-    console.log("Not Logged In");
-  });
-} else {
-  //objectStore start
-  let list = document.querySelectorAll(".series-title:not(.block)");
-  let newerList = [];
-  for (let item of list) newerList.push(item.innerText);
+let list = document.querySelectorAll(".queue-wrapper.cf");
+let regexp = /(.+\n)(?:.+:)(?: Episode (.+) – )?(.+)?\n?(.+)?/;
+let objectStore = [];
 
-  let progressList = document.querySelectorAll(".episode-progress");
-  progressList = Array.from(progressList);
-  progressList = progressList.filter(item => item.offsetParent != null);
-  var objectStore = [];
-  for (let i = 0; i < progressList.length; i++) {
-    let complete = progressList[i].style.cssText.replace(/([^0-9]+)/g, "");
-    complete > 90
-      ? objectStore.push({ watched: true })
-      : objectStore.push({ watched: false });
-  }
+for (let i = 0; i < list.length; i++) {
+  const currentObject = {};
+  const infoArray = regexp.exec(list[i].children[2].innerText);
+  currentObject.title = infoArray[1];
+  currentObject.episodeNumber = infoArray[2];
+  currentObject.episodeTitle = infoArray[3];
+  currentObject.episodeDescription = infoArray[4];
+  currentObject.episodeURL = list[i].children[2].href;
+  currentObject.episodeImage = list[i].children[2].children[0].children[0].src;
+  const episodeProgress =
+    list[i].children[2].children[0].children[1].children[0].style.width;
+  episodeProgress.slice(0, -1) > 90
+    ? (currentObject.watched = true)
+    : (currentObject.watched = false);
 
-  newerList.forEach((item, index) => (objectStore[index].title = item));
-
-  let currentEpisodeArray = document.querySelectorAll(
-    ".landscape-element.left"
-  );
-  //Current Episode URLs
-  currentEpisodeArray.forEach(
-    (item, index) => (objectStore[index].episodeURL = item.href)
-  ); //added to objectStore
-
-  let episodeDataContainer = document.querySelectorAll(
-    ".series-data.ellipsis:not(.block)"
-  ); //episode number and title text string
-  let regexp = /(?:Next up: )(?:Episode )(\S+)(?:\ \–\ )?(.+) */;
-  //regex to break the string down
-  let noNumberRegexp = /(?:Next up: )(.+) */;
-  //regex without episode number
-  episodeDataContainer.forEach((data, index) => {
-    let extractedArray = regexp.exec(data.innerText);
-    if (extractedArray !== null) {
-      objectStore[index].episodeNumber = extractedArray[1];
-      objectStore[index].episodeTitle = extractedArray[2];
-      //case with episode number
-    } else {
-      extractedArray = noNumberRegexp.exec(data.innerText);
-      objectStore[index].episodeNumber = null;
-      objectStore[index].episodeTitle = extractedArray[1];
-      //case of no episode number
-    }
-  }); //added to objectStore
-
-  let episodeDescriptionContainer = document.querySelectorAll(".short-desc");
-  episodeDescriptionContainer.forEach(
-    (item, index) => (objectStore[index].episodeDescription = item.innerText)
-  ); //added to objectStore
-
-  let episodeImageContainer = document.querySelectorAll(
-    ".landscape:not(.left)"
-  );
-  episodeImageContainer.forEach(
-    (item, index) => (objectStore[index].episodeImage = item.src)
-  ); //added to objectStore
-  console.log(objectStore);
-  //objectStore complete
-
-  chrome.storage.local.set({ objectStore, loggedIn: true }, () => {
-    console.log("User is logged in, set objectStore");
-  });
+  objectStore.push(currentObject);
+  console.log(infoArray);
 }
+
+chrome.storage.local.set({ objectStore, loggedIn: true }, () => {
+  console.log("User is logged in, set objectStore");
+});
