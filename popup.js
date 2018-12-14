@@ -120,7 +120,7 @@ function renderTitles(renderStore) {
         };
       } else globalExpanded = () => null;
     } //expand description logic
-    seriesMouseover(container, series, check);
+    seriesMouseover(container, check);
     seriesMouseleave(container, count, check); //Series expand hover
     descriptionContainerMouseover(descriptionContainer);
     descriptionContainerMouseleave(descriptionContainer); //descriptionContainer buttonlike hover
@@ -210,7 +210,7 @@ function descriptionContainerMouseleave(descriptionContainer) {
   });
 }
 
-function seriesMouseover(container, series, check) {
+function seriesMouseover(container, check) {
   container.addEventListener("mouseover", () => {
     container.style.background = "rgba(255,165,0,.84)";
     container.style.marginLeft = "-10px";
