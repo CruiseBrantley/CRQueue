@@ -100,20 +100,15 @@ function renderTitles(renderStore) {
       chrome.tabs.update({
         url: item.episodeURL
       });
-      // expandFunction();
       descriptionContainer.style.animationDuration = "250ms";
       descriptionContainer.style.marginLeft = "120%";
       setTimeout(() => {
-        // descriptionContainer.style.marginLeft = "0px";
         window.close();
       }, 300);
     }); //URL click handler
     container.addEventListener("click", () => expandFunction());
     function expandFunction() {
       if (globalExpanded() !== descriptionContainer) {
-        // item.episodeDescription.length > 50
-        //   ? (descriptionContainer.style.height = "130px")
-        //   : (descriptionContainer.style.height = "80px");
         descriptionContainer.style.height = "100px";
         globalExpanded = () => {
           descriptionContainer.style.height = "0px";
@@ -183,12 +178,8 @@ function sortTitles(data) {
 
 function searchTitles(e, objectStore) {
   let filtered = objectStore.filter(p => {
-    // let lowerText = p.episodeTitle.toLowerCase();
     let lowerTitle = p.title.toLowerCase();
-    return (
-      // lowerText.includes(e.target.value.toLowerCase()) ||
-      lowerTitle.includes(e.target.value.toLowerCase())
-    );
+    return lowerTitle.includes(e.target.value.toLowerCase());
   });
   renderTitles(filtered);
 }
@@ -284,13 +275,6 @@ function createSeries(item) {
 function createEpisodeTitle(item) {
   let episodeTitle = document.createElement("span");
   episodeTitle.innerHTML =
-    // item.episodeTitle.length > 50
-    //   ? "Ep." +
-    //     item.episodeNumber +
-    //     " " +
-    //     item.episodeTitle.substring(0, 50) +
-    //     "..."
-    //   :
     "Ep." +
     (item.episodeNumber ? item.episodeNumber : "SP") +
     " " +
