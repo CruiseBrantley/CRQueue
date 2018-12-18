@@ -80,7 +80,6 @@ function createQueue(data) {
 
 function renderTitles(renderStore) {
   let count = 0;
-  console.log(renderStore);
   while (page.firstChild) {
     page.removeChild(page.firstChild);
   }
