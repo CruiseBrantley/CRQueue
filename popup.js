@@ -80,9 +80,7 @@ function createQueue(data) {
 
 function renderTitles(renderStore) {
   let count = 0;
-  while (page.firstChild) {
-    page.removeChild(page.firstChild);
-  }
+  while (page.firstChild) page.removeChild(page.firstChild);
   for (let item of renderStore) {
     const linebreak = document.createElement("br");
     const container = createContainer(count);
@@ -300,8 +298,8 @@ function createCheck(item) {
 
 function createEpisodeDescription(item) {
   let episodeDescription = document.createElement("span");
-  item.episodeDescription === ""
-    ? (episodeDescription.innerHTML = "No Episode Description.")
+  item.episodeDescription === "" || undefined
+    ? (episodeDescription.innerHTML = "No episode description available.")
     : (episodeDescription.innerHTML = item.episodeDescription);
   episodeDescription.style.marginBottom = "5px";
   episodeDescription.style.padding = "5px";
