@@ -298,7 +298,7 @@ function createCheck(item) {
 
 function createEpisodeDescription(item) {
   let episodeDescription = document.createElement("span");
-  item.episodeDescription === "" || undefined
+  item.episodeDescription === "" || !item.episodeDescription
     ? (episodeDescription.innerHTML = "No episode description available.")
     : (episodeDescription.innerHTML = item.episodeDescription);
   episodeDescription.style.marginBottom = "5px";
