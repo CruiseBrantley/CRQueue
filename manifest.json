@@ -1,20 +1,35 @@
 {
   "name": "CRQueue",
-  "version": "0.0.2.3",
+  "version": "0.0.2.4",
   "description": "View your Crunchyroll queue from any tab",
-  "permissions": ["activeTab", "declarativeContent", "storage", "tabs"],
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "storage",
+    "tabs"
+  ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": false
   },
   "content_scripts": [
     {
-      "matches": ["https://www.crunchyroll.com/home/queue"],
-      "js": ["contentscript.js"]
+      "matches": [
+        "https://www.crunchyroll.com/home/queue"
+      ],
+      "js": [
+        "contentscript.js"
+      ]
     },
     {
-      "matches": ["https://www.crunchyroll.com/login?next=%2Fhome%2Fqueue"],
-      "js": ["contentScript2.js"]
+      "matches": [
+        "https://www.crunchyroll.com/login?next=%2Fhome%2Fqueue"
+      ],
+      "js": [
+        "contentScript2.js"
+      ]
     }
   ],
   "options_page": "options.html",
