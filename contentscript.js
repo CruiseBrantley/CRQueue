@@ -1,5 +1,5 @@
 let list = document.querySelectorAll(".queue-wrapper.cf");
-let regexp = /(.+\n)(?:.+:)(?: Episode (.+) – )?(.+)?\n?(.+)?/;
+let regexp = /(.+\n)(?:.+:)(?: Episode (.+) – )?(.+)?(?:\n+)?(.+)?/;
 let objectStore = [];
 
 for (let i = 0; i < list.length; i++) {
@@ -20,7 +20,6 @@ for (let i = 0; i < list.length; i++) {
     : (currentObject.watched = false);
 
   objectStore.push(currentObject);
-  console.log(infoArray);
 }
 
 chrome.storage.local.set({ objectStore, loggedIn: true }, () => {
